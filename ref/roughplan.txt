@@ -1,0 +1,30 @@
+interface Build {
+    int cyberware_capacity;
+    int armor_capacity;
+    slot[10] available_cyberware;
+}
+
+interface Slot {
+    cyberware_category = type;
+    Cyberware[num_slots] equipped;
+    int available_items;
+    String description;
+}
+
+Global enum cyberware_category = Frontal Cortex | Arms | Skeleton | Nervous System | Integumentary System | Operating System | Face | Hands | Circulatory System | Legs
+
+interface Cyberware {
+    int id;
+    cyberware_category type;
+    void* img;
+    String name;
+    bool is_iconic;
+    int cost;
+    int armor;
+    String effect;
+    attribute attunement;
+}
+
+Global enum attribute = Body | Reflexes | Technical Ability | Intelligence | Cool
+
+Global Cyberware[] catalog;
