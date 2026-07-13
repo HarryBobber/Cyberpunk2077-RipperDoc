@@ -1,0 +1,161 @@
+.slot {
+  --size: 96px;
+  --border-w: 2px;
+  /* 45° cut on the bottom-right corner, ~25% of the box in the reference */
+  --chamfer: 24px;
+  --chamfer-inner: calc(var(--chamfer) - var(--border-w));
+
+  --shape: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%,
+    0 100%
+  );
+  --shape-inner: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--chamfer-inner)),
+    calc(100% - var(--chamfer-inner)) 100%,
+    0 100%
+  );
+
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  border: 0;
+  background: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  isolation: isolate;
+  transition: transform 0.12s ease-out;
+}
+
+/* Border layer: a solid chamfered plate with the fill inset on top of it,
+   so the diagonal edge gets a stroke that clip-path alone can't give a border. */
+.slot__frame {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--slot-border);
+  clip-path: var(--shape);
+  transition: background 0.15s ease-out;
+}
+
+.slot__frame::after {
+  content: '';
+  position: absolute;
+  inset: var(--border-w);
+  clip-path: var(--shape-inner);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 90, 110, 0.05) 0 1px,
+      transparent 1px 6px
+    ),
+    linear-gradient(155deg, var(--slot-fill-hi), var(--slot-fill-lo));
+}
+
+/* Circuit-trace decoration: ticks along the top edge and the diagonal streak
+   running down toward the cut corner. */
+.slot__deco {
+  position: absolute;
+  inset: var(--border-w);
+  z-index: 1;
+  clip-path: var(--shape-inner);
+  pointer-events: none;
+  opacity: 0.55;
+  background:
+    repeating-linear-gradient(
+        90deg,
+        transparent 0 3px,
+        rgba(255, 120, 140, 0.35) 3px 4px
+      )
+      no-repeat 8% 6% / 42% 18%,
+    linear-gradient(
+      135deg,
+      transparent 26%,
+      rgba(255, 110, 130, 0.18) 26% 27.5%,
+      transparent 27.5% 30%,
+      rgba(255, 110, 130, 0.1) 30% 31%,
+      transparent 31%
+    );
+  transition: opacity 0.15s ease-out;
+}
+
+/* Cyan crosshair, empty state only */
+.slot__plus {
+  position: relative;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+}
+
+.slot__plus::before,
+.slot__plus::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: var(--slot-cyan);
+  box-shadow: 0 0 6px rgba(74, 168, 176, 0.5);
+  transition:
+    background 0.15s ease-out,
+    box-shadow 0.15s ease-out;
+}
+
+.slot__plus::before {
+  width: 100%;
+  height: 2px;
+}
+
+.slot__plus::after {
+  width: 2px;
+  height: 100%;
+}
+
+.slot__icon {
+  position: relative;
+  z-index: 2;
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* Equipped: hotter border and a cyan accent along the cut corner */
+.slot.is-equipped .slot__frame {
+  background: var(--slot-border-hot);
+}
+
+.slot.is-equipped .slot__deco {
+  opacity: 0.3;
+}
+
+/* Hover / focus */
+.slot:hover,
+.slot:focus-visible {
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.slot:hover .slot__frame,
+.slot:focus-visible .slot__frame {
+  background: var(--slot-border-hot);
+}
+
+.slot:hover .slot__deco,
+.slot:focus-visible .slot__deco {
+  opacity: 0.9;
+}
+
+.slot:hover .slot__plus::before,
+.slot:hover .slot__plus::after,
+.slot:focus-visible .slot__plus::before,
+.slot:focus-visible .slot__plus::after {
+  background: var(--slot-cyan-hot);
+  box-shadow: 0 0 10px rgba(127, 228, 238, 0.75);
+}

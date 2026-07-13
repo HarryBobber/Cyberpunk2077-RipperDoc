@@ -1,0 +1,26 @@
+.slot-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.slot-group__label {
+  margin: 0;
+  color: var(--category-label);
+  font-family: var(--display);
+  /* 27.5px lands Saira's cap height on the game's 19px, against the same
+     96px slot. Its natural advances then match too, so tracking stays at 0 —
+     the game's letters very nearly touch (1-3px gaps in the reference). */
+  font-size: 27.5px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(230, 50, 60, 0.35);
+}
+
+.slot-group__slots {
+  display: flex;
+  gap: 12px;
+}
