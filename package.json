@@ -13,7 +13,8 @@
     "@fontsource/rajdhani": "^5.2.7",
     "@fontsource/saira-condensed": "^5.2.8",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
